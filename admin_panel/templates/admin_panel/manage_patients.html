@@ -1,0 +1,6 @@
+<h2>All Patients</h2>
+<ul>
+    {% for pat in patients %}
+        <li>{{ pat.user.get_full_name }} ({{ pat.user.email }})</li>
+    {% endfor %}
+</ul>

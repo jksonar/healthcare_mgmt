@@ -1,0 +1,12 @@
+<h2>Departments</h2>
+<ul>
+    {% for dept in departments %}
+        <li>{{ dept.name }} - {{ dept.description }}</li>
+    {% endfor %}
+</ul>
+<h3>Add Department</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+</form>

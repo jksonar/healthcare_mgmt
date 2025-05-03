@@ -1,0 +1,27 @@
+<h2>Admin Dashboard</h2>
+<h3>Pending Doctor Approvals</h3>
+<ul>
+    {% for doc in pending_doctors %}
+        <li>
+            {{ doc.user.get_full_name }} ({{ doc.specialization }})
+            <a href="{% url 'approve_doctor' doc.id %}">Approve</a> |
+            <a href="{% url 'reject_doctor' doc.id %}">Reject</a>
+        </li>
+    {% empty %}
+        <li>No pending doctors.</li>
+    {% endfor %}
+</ul>
+
+<h3>Departments</h3>
+<ul>
+    {% for dept in departments %}
+        <li>{{ dept.name }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Recent Announcements</h3>
+<ul>
+    {% for ann in announcements %}
+        <li>{{ ann.title }} - {{ ann.created_at|date:"Y-m-d" }}</li>
+    {% endfor %}
+</ul>

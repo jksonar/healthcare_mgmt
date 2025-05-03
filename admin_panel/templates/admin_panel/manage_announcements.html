@@ -1,0 +1,12 @@
+<h2>Announcements</h2>
+<ul>
+    {% for ann in announcements %}
+        <li>{{ ann.title }} - {{ ann.created_at|date:"Y-m-d" }} ({{ ann.is_active|yesno:"Active,Inactive" }})</li>
+    {% endfor %}
+</ul>
+<h3>Add Announcement</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+</form>
