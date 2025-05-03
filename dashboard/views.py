@@ -11,9 +11,8 @@ def dashboard(request):
     user = request.user
     context = {}
 
-    # Admin Dashboard
     if user.is_superuser:
-        from accounts.models import DoctorProfile, PatientProfile
+        # Admin dashboard context
         from admin_panel.models import Department
         context['total_doctors'] = DoctorProfile.objects.count()
         context['pending_doctors'] = DoctorProfile.objects.filter(is_approved=False).count()
@@ -23,7 +22,6 @@ def dashboard(request):
         context['announcements'] = Announcement.objects.order_by('-created_at')[:3]
         return render(request, 'dashboard/admin_dashboard.html', context)
 
-    # Doctor Dashboard
     elif hasattr(user, 'doctorprofile'):
         doctor = user.doctorprofile
         context['upcoming_appointments'] = Appointment.objects.filter(
@@ -36,7 +34,6 @@ def dashboard(request):
         context['announcements'] = Announcement.objects.filter(is_active=True).order_by('-created_at')[:3]
         return render(request, 'dashboard/doctor_dashboard.html', context)
 
-    # Patient Dashboard
     elif hasattr(user, 'patientprofile'):
         patient = user.patientprofile
         context['upcoming_appointments'] = Appointment.objects.filter(
@@ -47,6 +44,45 @@ def dashboard(request):
         context['announcements'] = Announcement.objects.filter(is_active=True).order_by('-created_at')[:3]
         return render(request, 'dashboard/patient_dashboard.html', context)
 
-    # Fallback
     else:
         return redirect('login')
+
+@login_required
+def dashboard_appointments(request):
+    user = request.user
+    if user.is_superuser:
+        return redirect('admin_dashboard')
+    elif hasattr(user, 'doctorprofile'):
+        return redirect('doctor_appointments')
+    elif hasattr(user, 'patientprofile'):
+        return redirect('patient_appointments')
+    else:
+        return redirect('dashboard')
+
+@login_required
+def dashboard_messages(request):
+    return redirect('chat_list')
+
+@login_required
+def dashboard_medical_records(request):
+    user = request.user
+    if hasattr(user, 'doctorprofile'):
+        return redirect('doctor_patients')
+    elif hasattr(user, 'patientprofile'):
+        return redirect('patient_medical_history')
+    else:
+        return redirect('dashboard')
+
+@login_required
+def doctor_patients(request):
+    # List patients for the doctor (implement as needed)
+    pass
+
+@login_required
+def doctor_patient_records(request, patient_id):
+    # Show records for a specific patient (implement as needed)
+    pass
+
+@login_required
+def dashboard_admin_panel(request):
+    return redirect('admin_dashboard')

@@ -51,12 +51,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Logged in successfully!')
-            if hasattr(user, 'doctorprofile'):
-                return redirect('doctor_dashboard')
-            elif hasattr(user, 'patientprofile'):
-                return redirect('patient_dashboard')
-            else:
-                return redirect('admin_dashboard')
+            return redirect('dashboard')
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'accounts/login.html')
