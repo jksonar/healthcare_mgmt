@@ -23,4 +23,5 @@ urlpatterns = [
     path('appointments/', include('appointments.urls')),
     path('medical/', include('medical.urls')),
     path('admin-panel/', include('admin_panel.urls')),
+    path('chat/', include('chat.urls')),
 ]

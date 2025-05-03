@@ -9,4 +9,4 @@ class Message(models.Model):
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"From {self.sender} to {self.receiver} at {self.timestamp}"
+        return f"From {self.sender.username} to {self.receiver.username} at {self.timestamp}"
