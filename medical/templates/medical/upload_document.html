@@ -1,0 +1,7 @@
+<h2>Upload Medical Document</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+<a href="{% url 'doctor_patient_history' record.patient.id %}">Back to History</a>

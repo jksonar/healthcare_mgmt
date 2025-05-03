@@ -1,0 +1,37 @@
+<h2>Medical History for {{ patient.user.get_full_name }}</h2>
+<a href="{% url 'add_medical_record' patient.id %}">Add New Record</a>
+<ul>
+    {% for record in records %}
+        <li>
+            <strong>Date:</strong> {{ record.visit_date|date:"Y-m-d H:i" }}<br>
+            <strong>Diagnosis:</strong> {{ record.diagnosis }}<br>
+            <strong>Treatment:</strong> {{ record.treatment }}<br>
+            <strong>Notes:</strong> {{ record.notes }}<br>
+            <strong>Prescriptions:</strong>
+            <ul>
+                {% for pres in record.prescriptions.all %}
+                    <li>{{ pres.medication }} ({{ pres.dosage }}) - {{ pres.instructions }}</li>
+                {% empty %}
+                    <li>No prescriptions.</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'add_prescription' record.id %}">Add Prescription</a>
+            <br>
+            <strong>Documents:</strong>
+            <ul>
+                {% for doc in record.documents.all %}
+                    <li>
+                        <a href="{{ doc.file.url }}">{{ doc.description|default:"Document" }}</a>
+                        (uploaded {{ doc.uploaded_at|date:"Y-m-d H:i" }})
+                    </li>
+                {% empty %}
+                    <li>No documents.</li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'upload_medical_document' record.id %}">Upload Document</a>
+        </li>
+        <hr>
+    {% empty %}
+        <li>No records found.</li>
+    {% endfor %}
+</ul>
