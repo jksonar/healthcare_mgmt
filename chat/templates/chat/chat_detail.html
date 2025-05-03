@@ -2,12 +2,17 @@
 <div style="border:1px solid #ccc; padding:10px; max-height:300px; overflow-y:auto;">
     {% for msg in messages %}
         <div style="margin-bottom:10px;">
-            <strong>{{ msg.sender.get_full_name }}:</strong> {{ msg.content }}<br>
+            <strong>{{ msg.sender.get_full_name }}:</strong> {{ msg.content }}
+            {% if msg.attachment %}
+                <br>
+                <a href="{{ msg.attachment.url }}" target="_blank">📎 Attachment</a>
+            {% endif %}
+            <br>
             <small>{{ msg.timestamp|date:"Y-m-d H:i" }}{% if not msg.is_read and msg.sender == request.user %} (unread){% endif %}</small>
         </div>
     {% endfor %}
 </div>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Send</button>

@@ -1,0 +1,29 @@
+<h2>Patient Dashboard</h2>
+<p>Unread Messages: {{ unread_messages }}</p>
+<h3>Upcoming Appointments</h3>
+<ul>
+    {% for appt in upcoming_appointments %}
+        <li>{{ appt.scheduled_time|date:"Y-m-d H:i" }} with Dr. {{ appt.doctor.user.get_full_name }}</li>
+    {% empty %}
+        <li>No upcoming appointments.</li>
+    {% endfor %}
+</ul>
+<h3>Recent Medical Records</h3>
+<ul>
+    {% for rec in medical_records %}
+        <li>{{ rec.visit_date|date:"Y-m-d" }} - {{ rec.diagnosis|truncatechars:30 }}</li>
+    {% empty %}
+        <li>No records found.</li>
+    {% endfor %}
+</ul>
+<h3>Announcements</h3>
+<ul>
+    {% for ann in announcements %}
+        <li>{{ ann.title }} - {{ ann.created_at|date:"Y-m-d" }}</li>
+    {% endfor %}
+</ul>
+<p>
+    <a href="{% url 'patient_appointments' %}">My Appointments</a> |
+    <a href="{% url 'chat_list' %}">Messages</a> |
+    <a href="{% url 'patient_medical_history' %}">Medical History</a>
+</p>

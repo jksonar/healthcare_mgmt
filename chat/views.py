@@ -16,7 +16,11 @@ def chat_list(request):
     received_from = Message.objects.filter(receiver=user).values_list('sender', flat=True)
     user_ids = set(list(sent_to) + list(received_from))
     users = User.objects.filter(id__in=user_ids).exclude(id=user.id)
-    return render(request, 'chat/chat_list.html', {'users': users})
+    unread_counts = {
+        u.id: Message.objects.filter(sender=u, receiver=user, is_read=False).count()
+        for u in users
+    }
+    return render(request, 'chat/chat_list.html', {'users': users, 'unread_counts': unread_counts})
 
 @login_required
 def chat_detail(request, user_id):
@@ -30,7 +34,7 @@ def chat_detail(request, user_id):
     # Mark received messages as read
     messages.filter(receiver=user, is_read=False).update(is_read=True)
     if request.method == 'POST':
-        form = MessageForm(request.POST)
+        form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
             msg = form.save(commit=False)
             msg.sender = user
